@@ -17,7 +17,9 @@ router = APIRouter()
 
 
 @router.get("", response_model=list[SubjectResponse])
-def list_subjects_route(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+def list_subjects_route(
+    db: Session = Depends(get_db), current_user: User = Depends(get_current_user)
+):
     return list_subjects(db, current_user)
 
 

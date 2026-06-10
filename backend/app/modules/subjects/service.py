@@ -24,7 +24,9 @@ def create_subject(db: Session, user: User, payload: SubjectCreate) -> Subject:
     return repository.create_subject(db, user.id, payload)
 
 
-def update_subject(db: Session, user: User, subject_id: int, payload: SubjectUpdate) -> Subject:
+def update_subject(
+    db: Session, user: User, subject_id: int, payload: SubjectUpdate
+) -> Subject:
     subject = get_owned_subject(db, user, subject_id)
     return repository.update_subject(db, subject, payload)
 

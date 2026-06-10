@@ -11,7 +11,9 @@ _DUMMY_HASH = hash_password("dummy-always-fails-Prepilo$ecure!xk9m")
 
 
 def register(db: Session, payload: RegisterRequest) -> TokenResponse:
-    user = register_user(db, to_user_create(payload.username, payload.email, payload.password))
+    user = register_user(
+        db, to_user_create(payload.username, payload.email, payload.password)
+    )
     return TokenResponse(access_token=create_access_token(str(user.id)))
 
 
@@ -22,6 +24,8 @@ def login(db: Session, payload: LoginRequest) -> TokenResponse:
 
     candidate_hash = user.hashed_password if user is not None else _DUMMY_HASH
     if user is None or not verify_password(payload.password, candidate_hash):
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid login or password")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid login or password"
+        )
 
     return TokenResponse(access_token=create_access_token(str(user.id)))

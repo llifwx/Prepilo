@@ -3,7 +3,7 @@ from datetime import date, datetime
 
 from pydantic import BaseModel, Field, field_validator
 
-_HEX_COLOR_RE = re.compile(r'^#[0-9A-Fa-f]{3,8}$')
+_HEX_COLOR_RE = re.compile(r"^#[0-9A-Fa-f]{3,8}$")
 
 
 def _validate_color(v: str | None) -> str | None:
