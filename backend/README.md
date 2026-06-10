@@ -17,6 +17,7 @@ FastAPI backend for Prepilo MVP V1.
 - Python 3.12+
 - FastAPI
 - SQLAlchemy
+- Alembic
 - Pydantic Settings
 - JWT auth with `python-jose`
 - Password hashing with `passlib` and `bcrypt`
@@ -45,13 +46,19 @@ JWT_ALGORITHM=HS256
 
 ## Database
 
-The current MVP backend does not have Alembic migrations yet. For local SQLite development, create tables from SQLAlchemy models:
+For MVP V1, use a local database first. The default config uses SQLite:
 
-```bash
-python -c "from app.core.database import Base, engine; import app.modules.users.models, app.modules.subjects.models, app.modules.topics.models; Base.metadata.create_all(bind=engine)"
+```env
+DATABASE_URL=sqlite:///./prepilo.db
 ```
 
-This creates `backend/prepilo.db` when `DATABASE_URL=sqlite:///./prepilo.db`.
+Apply migrations:
+
+```bash
+alembic upgrade head
+```
+
+In `APP_ENV=local`, the app also runs `alembic upgrade head` on startup. This gives automatic local table creation while still keeping schema state inside Alembic. For staging and production, run migrations explicitly during deploy.
 
 ## Run
 
