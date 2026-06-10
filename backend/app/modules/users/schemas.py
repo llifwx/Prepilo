@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import AnyHttpUrl, BaseModel, EmailStr, Field
 
 
 class UserCreate(BaseModel):
@@ -10,7 +10,7 @@ class UserCreate(BaseModel):
 
 
 class UserUpdate(BaseModel):
-    avatar: str | None = Field(default=None, max_length=500)
+    avatar: AnyHttpUrl | None = None
     bio: str | None = Field(default=None, max_length=1000)
     daily_study_goal_hours: float | None = Field(default=None, ge=0.5, le=12)
 

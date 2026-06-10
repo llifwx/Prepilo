@@ -8,11 +8,11 @@ from app.modules.users.schemas import UserCreate, UserUpdate
 
 
 def register_user(db: Session, payload: UserCreate) -> User:
-    if repository.get_user_by_email(db, payload.email):
-        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Email is already registered")
-
-    if repository.get_user_by_username(db, payload.username):
-        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Username is already taken")
+    if repository.get_user_by_email(db, payload.email) or repository.get_user_by_username(db, payload.username):
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="An account with these details already exists",
+        )
 
     return repository.create_user(db, payload, hash_password(payload.password))
 

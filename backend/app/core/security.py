@@ -1,10 +1,10 @@
 from datetime import datetime, timedelta, timezone
 from typing import Any
 
-from jose import JWTError, jwt
+import jwt
 from passlib.context import CryptContext
 
-from app.core.config import get_settings
+from app.core.config import JWT_ALGORITHM, get_settings
 
 password_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -22,15 +22,18 @@ def create_access_token(subject: str, expires_delta: timedelta | None = None) ->
     expires_at = datetime.now(timezone.utc) + (
         expires_delta or timedelta(minutes=settings.access_token_expire_minutes)
     )
-    payload: dict[str, Any] = {"sub": subject, "exp": expires_at}
-    return jwt.encode(payload, settings.secret_key, algorithm=settings.jwt_algorithm)
+    payload: dict[str, Any] = {"sub": subject, "exp": expires_at, "type": "access"}
+    return jwt.encode(payload, settings.secret_key, algorithm=JWT_ALGORITHM)
 
 
 def decode_access_token(token: str) -> str | None:
     settings = get_settings()
     try:
-        payload = jwt.decode(token, settings.secret_key, algorithms=[settings.jwt_algorithm])
-    except JWTError:
+        payload = jwt.decode(token, settings.secret_key, algorithms=[JWT_ALGORITHM])
+    except jwt.PyJWTError:
+        return None
+
+    if payload.get("type") != "access":
         return None
 
     subject = payload.get("sub")
