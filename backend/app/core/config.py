@@ -13,14 +13,20 @@ class Settings(BaseSettings):
     app_env: str = Field(default="local", alias="APP_ENV")
     database_url: str = Field(default="sqlite:///./prepilo.db", alias="DATABASE_URL")
     secret_key: str = Field(alias="SECRET_KEY")
-    access_token_expire_minutes: int = Field(default=30, alias="ACCESS_TOKEN_EXPIRE_MINUTES")
-    allowed_origins: str = Field(default="http://localhost:3000", alias="ALLOWED_ORIGINS")
+    access_token_expire_minutes: int = Field(
+        default=30, alias="ACCESS_TOKEN_EXPIRE_MINUTES"
+    )
+    allowed_origins: str = Field(
+        default="http://localhost:3000", alias="ALLOWED_ORIGINS"
+    )
 
     @field_validator("secret_key")
     @classmethod
     def secret_key_must_be_strong(cls, v: str) -> str:
         if v == _WEAK_SECRET or len(v) < 32:
-            raise ValueError("SECRET_KEY must be set to a strong random value (min 32 chars)")
+            raise ValueError(
+                "SECRET_KEY must be set to a strong random value (min 32 chars)"
+            )
         return v
 
     @field_validator("database_url")

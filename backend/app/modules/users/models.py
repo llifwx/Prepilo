@@ -16,6 +16,10 @@ class User(Base):
     avatar: Mapped[str | None] = mapped_column(String(500), nullable=True)
     bio: Mapped[str | None] = mapped_column(String(1000), nullable=True)
     daily_study_goal_hours: Mapped[float] = mapped_column(default=2.0)
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
 
-    subjects = relationship("Subject", back_populates="owner", cascade="all, delete-orphan")
+    subjects = relationship(
+        "Subject", back_populates="owner", cascade="all, delete-orphan"
+    )

@@ -10,7 +10,13 @@ def get_subject_by_id(db: Session, subject_id: int) -> Subject | None:
 
 
 def get_user_subjects(db: Session, user_id: int) -> list[Subject]:
-    return list(db.scalars(select(Subject).where(Subject.owner_id == user_id).order_by(Subject.created_at.desc())))
+    return list(
+        db.scalars(
+            select(Subject)
+            .where(Subject.owner_id == user_id)
+            .order_by(Subject.created_at.desc())
+        )
+    )
 
 
 def create_subject(db: Session, user_id: int, payload: SubjectCreate) -> Subject:

@@ -12,7 +12,13 @@ def get_topic_by_id(db: Session, topic_id: int) -> Topic | None:
 
 
 def get_subject_topics(db: Session, subject_id: int) -> list[Topic]:
-    return list(db.scalars(select(Topic).where(Topic.subject_id == subject_id).order_by(Topic.created_at.desc())))
+    return list(
+        db.scalars(
+            select(Topic)
+            .where(Topic.subject_id == subject_id)
+            .order_by(Topic.created_at.desc())
+        )
+    )
 
 
 def create_topic(db: Session, payload: TopicCreate) -> Topic:
